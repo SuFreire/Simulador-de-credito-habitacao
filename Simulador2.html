@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Crédito Habitação | Banco Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        .professional-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .premium-shadow {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .input-professional {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .input-professional:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04);
+        }
+        .btn-professional {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-professional:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .btn-professional::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-professional:hover::before {
+            left: 100%;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-bar {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .professional-divider {
+            background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+        }
+    </style>
+</head>
+<body class="professional-gradient min-h-screen">
+    <!-- Header Professional -->
+    <header class="glass-effect border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Banco Professional</h1>
+                        <p class="text-sm text-gray-600">Crédito Habitação</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-6 text-sm text-gray-600">
+                    <span>📞 800 123 456</span>
+                    <span>✉️ credito@bancoprofessional.pt</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-16 fade-in">
+            <h2 class="text-5xl font-bold text-white mb-4">Simulador de Crédito Habitação</h2>
+            <p class="text-xl text-blue-100 max-w-2xl mx-auto">Descubra as melhores condições para o seu financiamento imobiliário com taxas competitivas e simulação instantânea</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Simulador Principal -->
+            <div class="lg:col-span-2 glass-effect rounded-3xl p-8 premium-shadow slide-up">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-2xl font-bold text-gray-800">Simulação de Crédito</h3>
+                    <div class="flex items-center space-x-2 text-sm text-gray-500">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>Cálculo em tempo real</span>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">Valor do Imóvel</label>
+                            <div class="relative">
+                                <input type="number" id="montante" value="300000" min="50000" max="2000000" step="1000"
+                                       class="w-full px-4 py-4 pl-8 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional text-lg font-semibold">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
+                            </div>
+                            <div class="mt-2 flex justify-between text-xs text-gray-500">
+                                <span>Min: 50.000€</span>
+                                <span>Max: 2.000.000€</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">Prazo de Financiamento</label>
+                            <div class="relative">
+                                <input type="range" id="prazoRange" min="5" max="40" value="30" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <input type="number" id="prazo" value="30" min="5" max="40" 
+                                       class="mt-3 w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional text-lg font-semibold text-center">
+                            </div>
+                            <div class="mt-2 flex justify-between text-xs text-gray-500">
+                                <span>5 anos</span>
+                                <span id="prazoDisplay" class="font-semibold">30 anos</span>
+                                <span>40 anos</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">Taxa de Juro Anual</label>
+                            <div class="relative">
+                                <input type="number" id="taxa" value="4.2" min="1" max="8" step="0.1" 
+                                       class="w-full px-4 py-4 pr-8 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional text-lg font-semibold">
+                                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+                            </div>
+                            <p class="mt-2 text-xs text-blue-600">Taxa promocional sujeita a aprovação</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Resultados em Tempo Real -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">Resumo da Simulação</h4>
+                            
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-4 bg-white rounded-xl shadow-sm">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Prestação Mensal</p>
+                                        <p id="prestacao" class="text-2xl font-bold text-blue-600">€ 1.432,25</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                                        <p class="text-xs text-gray-600 mb-1">Total a Pagar</p>
+                                        <p id="totalPagar" class="text-lg font-bold text-gray-800">€ 515.610</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                                        <p class="text-xs text-gray-600 mb-1">Total de Juros</p>
+                                        <p id="totalJuros" class="text-lg font-bold text-orange-600">€ 215.610</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Gráfico Visual -->
+                        <div class="bg-white rounded-2xl p-6 shadow-sm">
+                            <h5 class="text-sm font-semibold text-gray-700 mb-4">Distribuição do Pagamento</h5>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-600">Capital</span>
+                                    <span id="percentualCapital" class="text-xs font-semibold">58.2%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="barraCapital" class="bg-blue-600 h-2 rounded-full chart-bar" style="width: 58.2%"></div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-600">Juros</span>
+                                    <span id="percentualJuros" class="text-xs font-semibold">41.8%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="barraJuros" class="bg-orange-500 h-2 rounded-full chart-bar" style="width: 41.8%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de Pedido -->
+            <div class="glass-effect rounded-3xl p-8 premium-shadow slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Pedido de Pré-Aprovação</h3>
+                    <p class="text-gray-600 text-sm">Resposta em 24 horas úteis</p>
+                </div>
+                
+                <form id="formularioPedido" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo *</label>
+                        <input type="text" id="nome" required 
+                               class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional"
+                               placeholder="João Silva Santos">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Telefone *</label>
+                            <input type="tel" id="telefone" required 
+                                   class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional"
+                                   placeholder="+351 912 345 678">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                            <input type="email" id="email" required 
+                                   class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional"
+                                   placeholder="joao.silva@email.com">
+                        </div>
+                    </div>
+                    
+
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Observações</label>
+                        <textarea id="comentarios" rows="3" 
+                                  class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none input-professional resize-none"
+                                  placeholder="Informações adicionais sobre o seu pedido..."></textarea>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200">
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox" id="rgpd" required class="mt-1 w-5 h-5 text-blue-600 rounded">
+                            <div class="text-sm">
+                                <label for="rgpd" class="text-gray-700">
+                                    Li e aceito a <button type="button" onclick="mostrarRGPD()" class="text-blue-600 hover:underline font-semibold">Política de Privacidade</button> e os termos de tratamento de dados pessoais *
+                                </label>
+                                <p class="text-xs text-gray-500 mt-1">Os seus dados são protegidos de acordo com o RGPD</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold py-4 px-6 rounded-2xl btn-professional relative overflow-hidden">
+                        <span class="relative z-10">Enviar Pedido de Pré-Aprovação</span>
+                    </button>
+                    
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500">🔒 Dados protegidos com encriptação SSL</p>
+                    </div>
+                </form>
+                
+                <!-- Confirmação -->
+                <div id="confirmacao" class="hidden">
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-4">Pedido Enviado com Sucesso!</h4>
+                        <p class="text-gray-600 mb-6">Recebemos o seu pedido de pré-aprovação. A nossa equipa entrará em contacto consigo nas próximas 24 horas úteis.</p>
+                        
+                        <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 text-left">
+                            <h5 class="font-semibold text-gray-800 mb-3">Próximos Passos:</h5>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    <span>Análise preliminar do seu perfil</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    <span>Contacto telefónico para esclarecimentos</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    <span>Envio da proposta personalizada</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <button type="button" onclick="mostrarRGPD()" class="text-blue-600 hover:underline text-sm font-medium">
+                                📄 Consultar Política de Privacidade
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal RGPD Profissional -->
+    <div id="modalRGPD" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden premium-shadow">
+            <div class="p-8 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-800">Política de Privacidade</h3>
+                        <p class="text-gray-600 mt-1">Regulamento Geral sobre a Proteção de Dados (RGPD)</p>
+                    </div>
+                    <button onclick="fecharRGPD()" class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-8 overflow-y-auto max-h-[calc(90vh-200px)]">
+                <div class="space-y-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200">
+                            <h4 class="font-bold text-lg text-blue-800 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Dados Recolhidos
+                            </h4>
+                            <ul class="space-y-2 text-sm text-blue-700">
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                    <span>Nome completo</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                    <span>Contacto telefónico</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                    <span>Endereço de email</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                    <span>Informação financeira</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                    <span>Observações fornecidas</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-green-50 p-6 rounded-2xl border border-green-200">
+                            <h4 class="font-bold text-lg text-green-800 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Finalidades
+                            </h4>
+                            <ul class="space-y-2 text-sm text-green-700">
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                    <span>Análise de crédito habitação</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                    <span>Contacto comercial</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                    <span>Elaboração de propostas</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                    <span>Cumprimento legal</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-6 rounded-2xl border border-yellow-200">
+                        <h4 class="font-bold text-lg text-yellow-800 mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            Os Seus Direitos RGPD
+                        </h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <ul class="space-y-2 text-sm text-yellow-700">
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                                    <span>Direito de acesso</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                                    <span>Direito de retificação</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                                    <span>Direito ao apagamento</span>
+                                </li>
+                            </ul>
+                            <ul class="space-y-2 text-sm text-yellow-700">
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                                    <span>Direito de portabilidade</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                                    <span>Direito de oposição</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                                    <span>Direito de limitação</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                        <h4 class="font-bold text-lg text-gray-800 mb-4">Contactos para Exercer os Seus Direitos</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-sm text-gray-600 mb-2">Encarregado de Proteção de Dados:</p>
+                                <p class="font-semibold text-gray-800">dpo@bancoprofessional.pt</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-2">Linha de Apoio RGPD:</p>
+                                <p class="font-semibold text-gray-800">800 200 300</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <p class="text-xs text-gray-500">
+                                Banco Professional, S.A. | NIF: 123456789 | Sede: Av. da Liberdade, 1000 Lisboa
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-8 border-t border-gray-200 bg-gray-50">
+                <div class="flex justify-end">
+                    <button onclick="fecharRGPD()" 
+                            class="bg-blue-600 text-white px-8 py-3 rounded-2xl hover:bg-blue-700 transition-colors font-semibold">
+                        Compreendi e Aceito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sincronização dos inputs de prazo
+        const prazoRange = document.getElementById('prazoRange');
+        const prazoInput = document.getElementById('prazo');
+        const prazoDisplay = document.getElementById('prazoDisplay');
+        
+        prazoRange.addEventListener('input', function() {
+            prazoInput.value = this.value;
+            prazoDisplay.textContent = this.value + ' anos';
+            calcular();
+        });
+        
+        prazoInput.addEventListener('input', function() {
+            prazoRange.value = this.value;
+            prazoDisplay.textContent = this.value + ' anos';
+            calcular();
+        });
+
+        // Calculadora profissional
+        function calcular() {
+            const montante = parseFloat(document.getElementById('montante').value);
+            const prazoAnos = parseInt(document.getElementById('prazo').value);
+            const taxaAnual = parseFloat(document.getElementById('taxa').value);
+            
+            if (!montante || !prazoAnos || !taxaAnual || montante < 50000 || prazoAnos < 5) {
+                return;
+            }
+            
+            // Cálculo da prestação mensal
+            const taxaMensal = taxaAnual / 100 / 12;
+            const numeroMeses = prazoAnos * 12;
+            
+            const prestacaoMensal = montante * (taxaMensal * Math.pow(1 + taxaMensal, numeroMeses)) / 
+                                   (Math.pow(1 + taxaMensal, numeroMeses) - 1);
+            
+            const totalPagar = prestacaoMensal * numeroMeses;
+            const totalJuros = totalPagar - montante;
+            
+            // Atualizar interface
+            document.getElementById('prestacao').textContent = prestacaoMensal.toLocaleString('pt-PT', {
+                style: 'currency',
+                currency: 'EUR'
+            });
+            
+            document.getElementById('totalPagar').textContent = totalPagar.toLocaleString('pt-PT', {
+                style: 'currency',
+                currency: 'EUR'
+            });
+            
+            document.getElementById('totalJuros').textContent = totalJuros.toLocaleString('pt-PT', {
+                style: 'currency',
+                currency: 'EUR'
+            });
+            
+            // Atualizar gráfico
+            const percentualCapital = (montante / totalPagar * 100);
+            const percentualJuros = (totalJuros / totalPagar * 100);
+            
+            document.getElementById('percentualCapital').textContent = percentualCapital.toFixed(1) + '%';
+            document.getElementById('percentualJuros').textContent = percentualJuros.toFixed(1) + '%';
+            document.getElementById('barraCapital').style.width = percentualCapital + '%';
+            document.getElementById('barraJuros').style.width = percentualJuros + '%';
+        }
+        
+        // Event listeners para cálculo automático
+        document.getElementById('montante').addEventListener('input', calcular);
+        document.getElementById('taxa').addEventListener('input', calcular);
+        
+        // Formulário profissional
+        document.getElementById('formularioPedido').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const email = document.getElementById('email').value;
+            const rgpdAceite = document.getElementById('rgpd').checked;
+            
+            if (!nome || !telefone || !email || !rgpdAceite) {
+                alert('Por favor, preencha todos os campos obrigatórios e aceite a política de privacidade.');
+                return;
+            }
+            
+            // Validação de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, insira um email válido.');
+                return;
+            }
+            
+            // Simular envio
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<span class="relative z-10">Enviando...</span>';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                document.getElementById('formularioPedido').style.display = 'none';
+                document.getElementById('confirmacao').classList.remove('hidden');
+                document.getElementById('confirmacao').classList.add('fade-in');
+            }, 1500);
+        });
+        
+        // Modal RGPD
+        function mostrarRGPD() {
+            document.getElementById('modalRGPD').classList.remove('hidden');
+            document.getElementById('modalRGPD').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function fecharRGPD() {
+            document.getElementById('modalRGPD').classList.add('hidden');
+            document.getElementById('modalRGPD').classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Fechar modal clicando fora
+        document.getElementById('modalRGPD').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharRGPD();
+            }
+        });
+        
+        // Calcular ao carregar
+        window.addEventListener('load', calcular);
+        
+        // Formatação automática de números
+        document.getElementById('montante').addEventListener('blur', function() {
+            const value = parseInt(this.value);
+            if (value < 50000) this.value = 50000;
+            if (value > 2000000) this.value = 2000000;
+        });
+        
+        document.getElementById('taxa').addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (value < 1) this.value = 1;
+            if (value > 8) this.value = 8;
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98551e91158deeea',t:'MTc1ODkxNDQzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
